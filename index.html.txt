@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EverStead Global Limited | Marketplace</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for Inter font and smooth transitions */
+        :root {
+            --primary-color: #10B981; /* Emerald 500 */
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Slate 50 default */
+            transition: background-color 0.3s;
+        }
+        /* Dark mode overrides */
+        .dark body {
+            background-color: #111827; /* Gray 900 */
+        }
+        .item-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .item-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 4, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header & Navigation -->
+    <header class="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <!-- Updated Website Name -->
+            <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white cursor-pointer">
+                <span class="text-emerald-500">EverStead</span><span class="text-gray-800 dark:text-gray-200"> Global Limited</span>
+            </h1>
+            <nav class="hidden md:flex space-x-6 items-center font-medium">
+                <a href="#featured" class="text-gray-600 dark:text-gray-300 hover:text-emerald-600 transition duration-150">Buy</a>
+                <a href="#" onclick="showInfoMessage('Sell Item feature coming soon!')" class="text-gray-600 dark:text-gray-300 hover:text-emerald-600 transition duration-150">Sell Item</a>
+                <a href="#" onclick="showInfoMessage('Messages feature coming soon!')" class="text-gray-600 dark:text-gray-300 hover:text-emerald-600 transition duration-150">Messages</a>
+                <!-- Updated Account Button to open Modal -->
+                <button onclick="openSettingsModal()" class="px-4 py-2 bg-emerald-500 text-white rounded-lg shadow-md hover:bg-emerald-600 transition duration-150">Account</button>
+            </nav>
+            <button id="mobile-menu-button" class="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-emerald-600 focus:outline-none">
+                <!-- Hamburger Icon (Menu) -->
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Menu (Hidden by default) -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 shadow-lg border-t border-gray-100 dark:border-gray-700 absolute w-full z-40">
+        <nav class="flex flex-col space-y-2 p-4 font-medium">
+            <a href="#featured" class="block p-2 text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-gray-700 transition duration-150 rounded-md">Buy</a>
+            <a href="#" onclick="showInfoMessage('Sell Item feature coming soon!')" class="block p-2 text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-gray-700 transition duration-150 rounded-md">Sell Item</a>
+            <a href="#" onclick="showInfoMessage('Messages feature coming soon!')" class="block p-2 text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-gray-700 transition duration-150 rounded-md">Messages</a>
+            <button onclick="openSettingsModal()" class="block p-2 bg-emerald-500 text-white rounded-lg text-center hover:bg-emerald-600 transition duration-150 mt-2">Account</button>
+        </nav>
+    </div>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Search Bar and Hero Section -->
+        <section class="mb-12 bg-white dark:bg-gray-800 p-6 md:p-10 rounded-2xl shadow-xl">
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-4">Find almost anything, sold locally.</h2>
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                <div class="relative flex-grow">
+                    <input type="text" id="search-input" placeholder="Search food, clothing, car parts, appliances, agriculture..."
+                           class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-700 dark:text-gray-200 shadow-sm"
+                           onkeyup="filterItems()">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <!-- Search Icon -->
+                        <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                </div>
+                <button onclick="filterItems()" class="w-full sm:w-auto px-6 py-3 bg-emerald-500 text-white font-semibold rounded-xl hover:bg-emerald-600 transition duration-150 shadow-md">
+                    Search
+                </button>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Browse Popular Categories</h2>
+            <!-- Adjusted grid to handle 5 items gracefully across screen sizes -->
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+                <!-- Category Card: Food -->
+                <button onclick="filterItems('Food')" class="p-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl hover:ring-2 ring-emerald-400 transition item-card flex flex-col items-center">
+                    <span class="text-4xl" role="img" aria-label="Food">🍎</span>
+                    <span class="mt-2 text-lg font-medium text-gray-700 dark:text-gray-300">Food</span>
+                </button>
+                <!-- Category Card: Clothing -->
+                <button onclick="filterItems('Clothing')" class="p-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl hover:ring-2 ring-emerald-400 transition item-card flex flex-col items-center">
+                    <span class="text-4xl" role="img" aria-label="Clothing">👚</span>
+                    <span class="mt-2 text-lg font-medium text-gray-700 dark:text-gray-300">Clothing</span>
+                </button>
+                <!-- Category Card: Car Parts -->
+                <button onclick="filterItems('Car Part')" class="p-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl hover:ring-2 ring-emerald-400 transition item-card flex flex-col items-center">
+                    <span class="text-4xl" role="img" aria-label="Car Part">⚙</span>
+                    <span class="mt-2 text-lg font-medium text-gray-700 dark:text-gray-300">Car Parts</span>
+                </button>
+                <!-- Category Card: Home Appliances -->
+                <button onclick="filterItems('Appliance')" class="p-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl hover:ring-2 ring-emerald-400 transition item-card flex flex-col items-center">
+                    <span class="text-4xl" role="img" aria-label="Home Appliances">🏠</span>
+                    <span class="mt-2 text-lg font-medium text-gray-700 dark:text-gray-300">Appliances</span>
+                </button>
+                <!-- New Category Card: Raw Agricultural Product -->
+                <button onclick="filterItems('Agriculture')" class="p-4 bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-xl hover:ring-2 ring-emerald-400 transition item-card flex flex-col items-center">
+                    <span class="text-4xl" role="img" aria-label="Raw Agricultural Product">🌾</span>
+                    <span class="mt-2 text-lg font-medium text-gray-700 dark:text-gray-300 text-center">Raw Ag Products</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Featured Listings -->
+        <section id="featured">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Featured Items</h2>
+            <div id="listings-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Listing Cards will be injected here by JavaScript -->
+            </div>
+            <p id="no-results" class="hidden text-center text-xl text-gray-500 mt-10">No items found matching your filter.</p>
+        </section>
+
+    </main>
+
+    <!-- Settings Modal (New Addition) -->
+    <div id="settings-modal" class="fixed inset-0 bg-black bg-opacity-70 dark:bg-opacity-80 hidden justify-center items-center z-[100] p-4">
+        <div class="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full sm:w-11/12 max-w-lg overflow-hidden transform transition-all duration-300">
+            <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white">Account & Settings</h3>
+                <button onclick="closeSettingsModal()" class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white transition">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <div class="p-6 space-y-4">
+
+                <!-- Profile Management -->
+                <button onclick="showInfoMessage('Edit Profile: Simulated profile editor opened.')" class="w-full text-left flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Edit Profile Information</span>
+                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                </button>
+
+                <!-- Change Password -->
+                <button onclick="showInfoMessage('Change Password: Simulated password change form.')" class="w-full text-left flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Change Password</span>
+                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2v5a2 2 0 01-2 2h-2a2 2 0 01-2-2v-5a2 2 0 012-2h2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11V9a3 3 0 00-3-3H7a3 3 0 00-3 3v5a3 3 0 003 3h2a3 3 0 003-3v-2"></path></svg>
+                </button>
+
+                <!-- Notifications Preference -->
+                <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm">
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Email Notifications</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" checked class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 dark:peer-focus:ring-emerald-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-600"></div>
+                    </label>
+                </div>
+                
+                <!-- Dark Mode Toggle -->
+                <div class="flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm">
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Dark Mode</span>
+                    <label class="relative inline-flex items-center cursor-pointer">
+                        <input type="checkbox" id="dark-mode-toggle" class="sr-only peer">
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-emerald-300 dark:peer-focus:ring-emerald-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-emerald-600"></div>
+                    </label>
+                </div>
+
+
+                <!-- Contact Support -->
+                <button onclick="showInfoMessage('Support: Please email us at support@everstead.com for assistance.')" class="w-full text-left flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Contact Support</span>
+                    <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 4v-4z"></path></svg>
+                </button>
+
+                <!-- Rate Website -->
+                <button onclick="showInfoMessage('Thank you for using EverStead! Rating feature simulated.')" class="w-full text-left flex justify-between items-center p-3 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700 transition duration-150">
+                    <span class="font-medium text-gray-700 dark:text-gray-300">Rate EverStead</span>
+                    <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.01 8.72a1 1 0 01.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                </button>
+                
+                <!-- Sign Out -->
+                <button onclick="showInfoMessage('Sign Out simulated. Please come back soon!')" class="w-full py-3 mt-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-150 shadow-md">
+                    Sign Out
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Info Message Box (Replaces alert()) -->
+    <div id="info-message-box" class="fixed bottom-5 right-5 z-[101] hidden p-4 bg-emerald-600 text-white rounded-xl shadow-xl max-w-xs transition-all duration-300 transform opacity-0 translate-y-4" role="alert">
+        <p id="info-message-text"></p>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center">
+            <p class="text-gray-400 text-sm">&copy; 2024 EverStead Global Limited. All rights reserved.</p>
+            <div class="mt-2 space-x-4">
+                <a href="#" class="text-gray-400 hover:text-emerald-500 text-sm">Terms</a>
+                <a href="#" class="text-gray-400 hover:text-emerald-500 text-sm">Privacy</a>
+                <a href="#" class="text-gray-400 hover:text-emerald-500 text-sm">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mock Item Data
+        const allItems = [
+            { name: "Artisan Bread Loaf", category: "Food", price: "$6.00", description: "Freshly baked sourdough, 1kg.", image: "https://placehold.co/400x300/F59E0B/FFFFFF?text=Food" },
+            { name: "Denim Jeans (Slim Fit)", category: "Clothing", price: "$45.00", description: "Worn once, excellent condition, size 32.", image: "https://placehold.co/400x300/3B82F6/FFFFFF?text=Clothing" },
+            { name: "Organic Wheat Grain", category: "Agriculture", price: "$350.00 / ton", description: "Bulk supply of non-GMO wheat, available for immediate shipment.", image: "https://placehold.co/400x300/4CAF50/FFFFFF?text=Agriculture" },
+            { name: "Oil Filter (Honda Civic 2018)", category: "Car Part", price: "$12.50", description: "New in box, premium quality.", image: "https://placehold.co/400x300/EF4444/FFFFFF?text=Car+Part" },
+            { name: "Robot Vacuum Cleaner", category: "Appliance", price: "$150.00", description: "Barely used, smart navigation.", image: "https://placehold.co/400x300/14B8A6/FFFFFF?text=Appliance" },
+            { name: "Organic Blueberries", category: "Food", price: "$5.50", description: "Pint container, seasonal harvest.", image: "https://placehold.co/400x300/F59E0B/FFFFFF?text=Food" },
+            { name: "Wool Scarf (Handmade)", category: "Clothing", price: "$30.00", description: "Soft merino wool, grey color.", image: "https://placehold.co/400x300/3B82F6/FFFFFF?text=Clothing" },
+            { name: "Brake Pad Set (Universal)", category: "Car Part", price: "$55.00", description: "Heavy-duty ceramic pads.", image: "https://placehold.co/400x300/EF4444/FFFFFF?text=Car+Part" },
+            { name: "Microwave Oven (Compact)", category: "Appliance", price: "$75.00", description: "Black finish, 0.7 cu ft capacity.", image: "https://placehold.co/400x300/14B8A6/FFFFFF?text=Appliance" },
+            { name: "Vintage T-Shirt", category: "Clothing", price: "$20.00", description: "Graphic print, perfect for summer.", image: "https://placehold.co/400x300/3B82F6/FFFFFF?text=Clothing" },
+            { name: "Headlight Assembly (Left)", category: "Car Part", price: "$90.00", description: "For Mazda 3, 2015-2018 model.", image: "https://placehold.co/400x300/EF4444/FFFFFF?text=Car+Part" },
+        ];
+
+        const listingsContainer = document.getElementById('listings-container');
+        const searchInput = document.getElementById('search-input');
+        const noResults = document.getElementById('no-results');
+        const settingsModal = document.getElementById('settings-modal');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const html = document.documentElement;
+
+        /**
+         * Renders the item cards into the listings container.
+         * @param {Array} itemsToRender - The array of items to display.
+         */
+        function renderItems(itemsToRender) {
+            listingsContainer.innerHTML = ''; // Clear existing listings
+            if (itemsToRender.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            itemsToRender.forEach(item => {
+                const itemHtml = `
+                    <div class="item-card bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-100 dark:border-gray-700 cursor-pointer">
+                        <img src="${item.image}" alt="${item.name}" 
+                             class="w-full h-48 object-cover object-center" 
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x300/6B7280/FFFFFF?text=No+Image';">
+                        <div class="p-5">
+                            <span class="inline-block px-3 py-1 text-xs font-semibold rounded-full 
+                                ${item.category === 'Food' ? 'bg-yellow-100 text-yellow-800' : ''}
+                                ${item.category === 'Clothing' ? 'bg-blue-100 text-blue-800' : ''}
+                                ${item.category === 'Car Part' ? 'bg-red-100 text-red-800' : ''}
+                                ${item.category === 'Appliance' ? 'bg-teal-100 text-teal-800' : ''}
+                                ${item.category === 'Agriculture' ? 'bg-lime-100 text-lime-800' : ''}
+                            ">${item.category === 'Agriculture' ? 'Raw Ag Products' : item.category}</span>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mt-2 truncate">${item.name}</h3>
+                            <p class="text-2xl font-extrabold text-emerald-600 mt-1 mb-3">${item.price}</p>
+                            <p class="text-sm text-gray-500 mb-4 h-10 overflow-hidden">${item.description}</p>
+                            <button class="w-full py-2 bg-emerald-500 text-white rounded-lg font-medium hover:bg-emerald-600 transition duration-150">
+                                View Item
+                            </button>
+                        </div>
+                    </div>
+                `;
+                listingsContainer.insertAdjacentHTML('beforeend', itemHtml);
+            });
+        }
+
+        /**
+         * Filters the items based on search input and/or category.
+         * @param {string|null} category - Optional category name to filter by.
+         */
+        function filterItems(category = null) {
+            const query = searchInput.value.toLowerCase().trim();
+            
+            // If filtering by category, also update the search bar visually
+            if (category && category !== 'All') {
+                // If a category button is clicked, set the search input value to that category for clarity
+                searchInput.value = category === 'Agriculture' ? 'Raw Ag Products' : category;
+            } else if (!category && searchInput.value) {
+                // If filtering by search, reset category filter logic
+                category = null;
+            } else {
+                // If search is empty and no category passed, show all
+                category = null;
+            }
+
+
+            const filtered = allItems.filter(item => {
+                const matchesQuery = !query || item.name.toLowerCase().includes(query) || item.description.toLowerCase().includes(query) || item.category.toLowerCase().includes(query) || (item.category === 'Agriculture' && query.includes('raw ag products'.toLowerCase()));
+                const matchesCategory = !category || item.category === category;
+                
+                // If a category was clicked (which updates the search input), check against the category key
+                if (category && category !== 'All') {
+                     return item.category === category;
+                }
+
+                return matchesQuery;
+            });
+
+            renderItems(filtered);
+        }
+        
+        /**
+         * Displays a custom non-blocking info message at the bottom right.
+         * @param {string} message - The message to display.
+         */
+        let messageTimeout;
+        function showInfoMessage(message) {
+            const box = document.getElementById('info-message-box');
+            const text = document.getElementById('info-message-text');
+            
+            clearTimeout(messageTimeout);
+
+            text.textContent = message;
+            box.classList.remove('hidden', 'opacity-0', 'translate-y-4');
+            box.classList.add('opacity-100', 'translate-y-0', 'flex');
+
+            // Hide the message after 4 seconds
+            messageTimeout = setTimeout(() => {
+                box.classList.remove('opacity-100', 'translate-y-0');
+                box.classList.add('opacity-0', 'translate-y-4');
+                setTimeout(() => {
+                    box.classList.add('hidden');
+                }, 300); // Wait for transition
+            }, 4000);
+        }
+        
+        // --- Modal Control Functions ---
+        function openSettingsModal() {
+            settingsModal.classList.remove('hidden');
+            settingsModal.classList.add('flex');
+        }
+
+        function closeSettingsModal() {
+            settingsModal.classList.remove('flex');
+            settingsModal.classList.add('hidden');
+        }
+
+        // --- Dark Mode Logic ---
+        function applyDarkMode(isDark) {
+            if (isDark) {
+                html.classList.add('dark');
+            } else {
+                html.classList.remove('dark');
+            }
+        }
+        
+        function setupDarkMode() {
+            const isDark = localStorage.getItem('theme') === 'dark' || 
+                           (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+            
+            // Set initial state
+            applyDarkMode(isDark);
+            darkModeToggle.checked = isDark;
+            
+            // Add listener for toggle
+            darkModeToggle.addEventListener('change', (e) => {
+                const isChecked = e.target.checked;
+                applyDarkMode(isChecked);
+                localStorage.setItem('theme', isChecked ? 'dark' : 'light');
+                showInfoMessage(isChecked ? 'Dark Mode Activated.' : 'Light Mode Activated.');
+            });
+        }
+        
+        // Initial load
+        window.onload = function() {
+            renderItems(allItems);
+            setupDarkMode(); // Initialize Dark Mode
+            
+            // Mobile menu toggle
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+            
+            // Close modal on outside click (optional, but good UX)
+            settingsModal.addEventListener('click', (e) => {
+                if (e.target === settingsModal) {
+                    closeSettingsModal();
+                }
+            });
+        };
+    </script>
+</body>
+</html>
